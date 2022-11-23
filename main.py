@@ -1,5 +1,14 @@
-import sys
-sys.path.insert(1, 'https://github.com/RuslanAbbasov/python_moodle/blob/6620625fd023c521cca1d82941a8dc620324fe91/2.1.3/pdf_report.py')
-
-import table_report
 import pdf_report
+import table_report
+
+
+command = "".join(input(
+    'Введите, что вы желаете получить\n  -Вакансии- или -Статистика-\nПоле для ввода:'
+                       ).lower().split())
+print(command)
+if command == 'вакансии':
+    table_report.InputConnect()
+elif command == 'статистика':
+    pdf_report.Report()
+else:
+    print('Вы ввели некорректные данные\nНеобходимо ввести\n-Вакансии- или -Статистика-')
