@@ -1,5 +1,3 @@
-from jinja2 import Environment, FileSystemLoader
-import pdfkit
 import csv
 from _datetime import datetime
 import re
@@ -355,10 +353,10 @@ class Report:
 
         pdfkit.from_string(pdf_template, 'report.pdf', configuration=config, options=options)
 
-inp = InputConnect()
-data = DataSet.prepare(inp.params[0])
-info = InputConnect.print(data, inp.params[1])
-Report.generate_image(info, inp.params[1])
-Report.report_excel(info, inp.params[1])
-
-Report.generate_pdf(info, inp.params[1])
+# inp = InputConnect()
+# data = DataSet.prepare(inp.params[0])
+# info = InputConnect.print(data, inp.params[1])
+# Report.generate_image(info, inp.params[1])
+# Report.report_excel(info, inp.params[1])
+#
+# Report.generate_pdf(info, inp.params[1])
