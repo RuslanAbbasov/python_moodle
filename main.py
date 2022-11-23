@@ -9,6 +9,6 @@ print(command)
 if command == 'вакансии':
     table_report.InputConnect()
 elif command == 'статистика':
-    pdf_report.Report()
+    pdf_report.InputConnect()
 else:
     print('Вы ввели некорректные данные\nНеобходимо ввести\n-Вакансии- или -Статистика-')

@@ -88,7 +88,9 @@ class DataSet:
 
 class InputConnect:
     def __init__(self):
-        self.params = InputConnect.get_prms()
+        params = InputConnect.get_prms()
+        data = DataSet.prepare(params[0])
+        InputConnect.print(data, params[1])
 
     @staticmethod
     def get_prms():
@@ -159,11 +161,20 @@ class InputConnect:
         print(
             'Доля вакансий по городам (в порядке убывания): {}'.format(InputConnect.first_el(res_sort_fract_vac_area)))
 
-        return salary_years, vac_salary_years, vacs_years, vac_count_years, InputConnect.first_el(
-            res_sort_area_salary), InputConnect.first_el(res_sort_fract_vac_area)
+        res = [salary_years, vac_salary_years, vacs_years, vac_count_years, InputConnect.first_el(
+            res_sort_area_salary), InputConnect.first_el(res_sort_fract_vac_area)]
+
+        Report(res, vac_name)
 
 
 class Report:
+    def __init__(self, info, vac_name):
+        Report.vac_name = vac_name
+        Report.info = info
+        Report.report_excel(info, vac_name)
+        Report.generate_image(info, vac_name)
+        Report.generate_pdf(info, vac_name)
+
     @staticmethod
     def sym_n(dct):
         for key in list(dct.keys()):
@@ -318,8 +329,6 @@ class Report:
         Report.border(ws2)
         wb.save('report.xlsx')
 
-        return
-
     @staticmethod
     def generate_pdf(info, vac):
         columns1 = ['Год', 'Средняя зарплата', f'Средняя зарплата - {vac}', 'Количество вакансий',
@@ -352,11 +361,3 @@ class Report:
         config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
 
         pdfkit.from_string(pdf_template, 'report.pdf', configuration=config, options=options)
-
-# inp = InputConnect()
-# data = DataSet.prepare(inp.params[0])
-# info = InputConnect.print(data, inp.params[1])
-# Report.generate_image(info, inp.params[1])
-# Report.report_excel(info, inp.params[1])
-#
-# Report.generate_pdf(info, inp.params[1])
