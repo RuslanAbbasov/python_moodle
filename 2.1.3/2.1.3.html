@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>h1, h2{
+                text-align: center;
+            }
+            img{
+                margin: 10px auto 20px;
+                display: block;
+                width: 800px;
+                height: 600px;
+            }
+            body{
+                font-family: 'Verdana',sans-serif;
+            }
+            table, th, td {
+                border: 1px solid #000000;
+                border-collapse: collapse;
+                text-align: center;
+                padding: 5px;
+            }
+            .stat{
+                margin: 20px;
+                width: 400px;
+            }
+    </style>
+</head>
+<body>
+    <h1>Аналитика по зарплатам и городам для профессии {{vac}}</h1>
+    <img src="file:///C:/Users/User/pythonProject/2.Moodle/2.1.3/graphLAST.png">
+    <h2>Статистика по годам</h2>
+    <table>
+        <tr>
+            <th>{{columns1[0]}}</th>
+            <th>{{columns1[1]}}</th>
+            <th>{{columns1[2]}}</th>
+            <th>{{columns1[3]}}</th>
+            <th>{{columns1[4]}}</th>
+        </tr>
+        {% for key, value in salary_years.items() %}
+            <tr>
+                <td>{{key}}</td>
+                <td>{{value}}</td>
+                <td>{{vac_salary_years[key]}}</td>
+                <td>{{vacs_years[key]}}</td>
+                <td>{{vac_count_years[key]}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2>Статистика по городам</h2>
+    <div style="float: left">
+        <table class = 'stat' style="float: left;">
+            <tr>
+                <th>{{columns2[0]}}</th>
+                <th>{{columns2[1]}}</th>
+            </tr>
+            </tr>
+            {% for key, value in res_sort_area_salary.items() %}
+                <tr>
+                    <td>{{key}}</td>
+                    <td>{{value}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <table class = 'stat'>
+            <tr>
+                <th>{{columns2[3]}}</th>
+                <th>{{columns2[4]}}</th>
+            </tr>
+            </tr>
+            {% for key, value in res_sort_fract_vac_area.items() %}
+                <tr>
+                    <td>{{key}}</td>
+                    <td>{{value}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
