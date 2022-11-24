@@ -1,7 +1,7 @@
 import pdf_report
 import table_report
 
-
+# SOME OTHER DIFF
 command = "".join(input(
     'Введите, что вы желаете получить\n  -Вакансии- или -Статистика-\nПоле для ввода:'
                        ).lower().split())
