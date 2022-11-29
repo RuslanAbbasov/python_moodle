@@ -10,7 +10,9 @@ from openpyxl.styles import Font
 from openpyxl.styles.numbers import BUILTIN_FORMATS
 from jinja2 import Environment, FileSystemLoader
 import pdfkit
-
+"""
+Файл, реализующий показ статистики
+"""
 
 currencyToRub = {
     "AZN": 35.68,
@@ -26,7 +28,23 @@ currencyToRub = {
 
 
 class Vacancy:
+    """Класс для представления вакансии
+
+    Attribute:
+        name (str): Название вакансии
+        salary (str): Зарплата
+        area_name (str): Местоположение
+        published_at (str): Дата публикации
+    """
     def __init__(self, name, salary, area_name, published_at):
+        """Инициализирует объект Vacancy
+
+        Args:
+        :param name (str): Название вакансии
+        :param salary (str): Зарплата
+        :param area_name (str): Местоположение
+        :param published_at (str): Дата публикации
+        """
         self.name = name
         self.salary = salary
         self.area_name = area_name
@@ -34,7 +52,21 @@ class Vacancy:
 
 
 class Salary:
+    """Класс для представления зарплаты
+
+    Attribute:
+        salary_from(int): Нижняя граница оклада
+        salary_to(int): Верхняя граница оклада
+        salary_currency(str): Валюта
+    """
     def __init__(self, salary_from, salary_to, salary_currency):
+        """Инициализирует объект Salary
+
+        Args:
+        :param salary_from(int): Нижняя граница оклада
+        :param salary_to(int): Верхняя граница оклада
+        :param salary_currency(str): Валюта
+        """
         self.salary_from = salary_from
         self.salary_to = salary_to
         self.salary_currency = salary_currency
@@ -42,16 +74,36 @@ class Salary:
             self.salary_currency]
 
     def get_salary_ru(self):
+        """Вычисляет ср зарплату и переводит ее в рубли
+
+        :return: float salary_ru
+        """
         return self.salary_ru
 
 
 class DataSet:
+    """Класс для составления списка вакансий
+
+    Attribute:
+        file_name(str): Имя файла
+    """
     def __init__(self, file_name):
+        """Инициализирует объект DataSet
+
+        :param file_name: (str): Имя файла
+        """
         self.file_name = file_name
         self.vacancies_objects = DataSet.prepare(file_name)
 
     @staticmethod
     def csv_reader(filename):
+        """Парсер csv файла. Если файл не пустой, то он делится на названия колонок и сами записи вакансий
+
+        :param filename: (str): Имя файла
+        :return:
+            clmns (list[str]): названия колонок,
+            lines (list[list[str]]): записи вакансий
+        """
         with open(filename, encoding="utf-8-sig") as f:
             data = [x for x in csv.reader(f)]
         try:
@@ -64,6 +116,11 @@ class DataSet:
 
     @staticmethod
     def prepare(filename):
+        """Фильтрует вакансии и создает список вакансий(словарей), где key - название колонки, а value - значение
+
+        :param filename: (str): Имя файла
+        :return: vac(list[Vacancy]): список вакансий
+        """
         clmns, lines = DataSet.csv_reader(filename)
         filtred = [i for i in lines if len(i) == len(clmns) and '' not in i]
         vac = []
@@ -83,23 +140,49 @@ class DataSet:
 
     @staticmethod
     def remove_tags(args):
+        """Удаляет html теги
+
+        :param args: (list[str]) вакансия
+        :return: (list[str]) отфильтровонная вакансия
+        """
         return " ".join(re.sub(r"\<[^>]*\>", "", args).split())
 
 
 class InputConnect:
+    """Класс для получения входных данных и вывода статистики
+
+    Attribute:
+
+    """
     def __init__(self):
+        """Инициализирует объект InputConnect
+
+        Вызывает метод prepare класса DataSet для получения списка вакансий
+        Вызывает метод print класса InputConnect для вывода статистики
+        """
         params = InputConnect.get_prms()
         data = DataSet.prepare(params[0])
         InputConnect.print(data, params[1])
 
     @staticmethod
     def get_prms():
+        """Реализует получение входных данных
+
+        :return:
+            file_name(str): имя файла
+            vacancy(str): название профессии
+        """
         file_name = input("Введите название файла: ")
         vacancy = input("Введите название профессии: ")
         return file_name, vacancy
 
     @staticmethod
     def first_el(dic):
+        """Выбирает только первые 10 элементов
+
+        :param dic: (dict): словарь, содержащий статистику
+        :return: new_dic (dict): новый словарь статистики(первые 10 пар dic)
+        """
         new_dic = {}
         i = 0
         for key, value in dic.items():
@@ -111,6 +194,11 @@ class InputConnect:
 
     @staticmethod
     def print(dic_vacancies, vac_name):
+        """Выводит статистику и вызывает Класс Report
+
+        :param dic_vacancies: (list[Vacancy]) список вакансий
+        :param vac_name: (str) название профессии
+        """
         years = set()
         for vacancy in dic_vacancies:
             years.add(int(datetime.strptime(vacancy.published_at, '%Y-%m-%dT%H:%M:%S%z').strftime('%Y')))
@@ -168,7 +256,18 @@ class InputConnect:
 
 
 class Report:
+    """Класс для реализации всей статистики
+
+    Attribute:
+        info(list[dict]): список статистики
+        vac_name(str): название профессии
+    """
     def __init__(self, info, vac_name):
+        """Инициализирует объект Report и вызывает методы класса Report для создания статистических файлов
+
+        :param info: (list[dict]): список статистики
+        :param vac_name: (str): название профессии
+        """
         Report.vac_name = vac_name
         Report.info = info
         Report.report_excel(info, vac_name)
@@ -177,6 +276,11 @@ class Report:
 
     @staticmethod
     def sym_n(dct):
+        """Проходится по словарю и заменяет '-' на '\n' в ключах словаря
+
+        :param dct: (dict) словарь статистики
+        :return: dct: (dict) новый словарь статистики
+        """
         for key in list(dct.keys()):
             if '-' in key:
                 new = key.replace('-', '\n')
@@ -192,12 +296,22 @@ class Report:
 
     @staticmethod
     def plus_other(dct):
+        """Добавляет в словарь ключ 'Другие' со значением остатка долей
+
+        :param dct: (dict) словарь статистики
+        :return: dct: (dict) новый словарь статистики
+        """
         dct['Другие'] = 1 - sum(dct.values())
         dct = {k: v for k, v in sorted(dct.items(), key=lambda item: item[1], reverse=True)}
         return dct
 
     @staticmethod
     def generate_image(info, vac):
+        """Генерирует файл png с графиками по статистике
+
+        :param info: (list[dict]): список статистики
+        :param vac: (str): название профессии
+        """
         salary_years = info[0]
         vac_salary_years = info[1]
         vacs_years = info[2]
@@ -257,7 +371,11 @@ class Report:
         plt.show()
 
     @staticmethod
-    def weight(ws):  # Ширина столбоц
+    def weight(ws):
+        """Изменяет ширину столбцов на автоматическую
+
+        :param ws: Ecxel лист
+        """
         for col in ws.columns:
             max_length = 0
             column = get_column_letter(col[0].column)
@@ -271,7 +389,11 @@ class Report:
             ws.column_dimensions[column].width = adjusted_width
 
     @staticmethod
-    def border(ws):  # Границы
+    def border(ws):
+        """Создает границы ячеек
+
+        :param ws: Ecxel лист
+        """
         thin = Side(border_style='thin', color="000000")
         for i, column in enumerate(ws.columns):
             for cell in column:
@@ -280,11 +402,21 @@ class Report:
 
     @staticmethod
     def get_head(ws, columns):
+        """Заполняет ячейки названием колонок
+
+        :param ws: Ecxel лист
+        :param columns:(list) Колонки
+        """
         for i, column in enumerate(columns):
             ws.cell(row=1, column=(1 + i), value=column).font = Font(bold=True)
 
     @staticmethod
     def get_column_year(ws, info):
+        """Заполняет колонки первого листа информацией с годами
+
+        :param ws: Ecxel лист
+        :param info: (tuple[dict]) статистика
+        """
         salary_years = info[0]
         vac_salary_years = info[1]
         vacs_years = info[2]
@@ -294,6 +426,11 @@ class Report:
 
     @staticmethod
     def get_column_area(ws, info):
+        """Заполняет колонки второго листа информацией с городами
+
+        :param ws: Ecxel лист
+        :param info: (tuple[dict]) статистика
+        """
         res_sort_area_salary = info[4]
         res_sort_fract_vac_area = info[5]
         # Добавление колонок города
@@ -311,6 +448,11 @@ class Report:
 
     @staticmethod
     def report_excel(info, vac):
+        """Генерирует файл Ecxel с таблицами по статистике
+
+        :param info: (list[dict]): список статистики
+        :param vac: (str): название профессии
+        """
         columns1 = ['Год', 'Средняя зарплата', f'Средняя зарплата - {vac}', 'Количество вакансий',
                     f'Количество вакансий - {vac}']
         columns2 = ['Город', 'Уровень зарплат', '', 'Город', 'Доля вакансий']
@@ -331,6 +473,11 @@ class Report:
 
     @staticmethod
     def generate_pdf(info, vac):
+        """Генерирует файл pdf с графиками и таблицами по статистике
+
+        :param info: (list[dict]): список статистики
+        :param vac: (str): название профессии
+        """
         columns1 = ['Год', 'Средняя зарплата', f'Средняя зарплата - {vac}', 'Количество вакансий',
                     f'Количество вакансий - {vac}']
         columns2 = ['Город', 'Уровень зарплат', '', 'Город', 'Доля вакансий']
