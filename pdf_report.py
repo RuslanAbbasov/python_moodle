@@ -66,6 +66,15 @@ class Salary:
         :param salary_from(int): Нижняя граница оклада
         :param salary_to(int): Верхняя граница оклада
         :param salary_currency(str): Валюта
+
+        >>> type(Salary(11.0, 21.4, 'RUR')).__name__
+        'Salary'
+        >>> Salary(11.0, 21.4, 'RUR').salary_from
+        11
+        >>> Salary(11.0, 21.4, 'RUR').salary_to
+        21
+        >>> Salary(11.0, 21.4, 'RUR').salary_currency
+        'RUR'
         """
         self.salary_from = salary_from
         self.salary_to = salary_to
@@ -77,6 +86,15 @@ class Salary:
         """Вычисляет ср зарплату и переводит ее в рубли
 
         :return: float salary_ru
+
+        >>> Salary(11.0, 21.4, 'RUR').get_salary_ru()
+        16.0
+        >>> Salary(10, 20, 'RUR').get_salary_ru()
+        16.0
+        >>> Salary(10, 30.0, 'RUR').get_salary_ru()
+        20.0
+        >>> Salary(10, 30.0, 'EUR').get_salary_ru()
+        1198.0
         """
         return self.salary_ru
 
@@ -276,7 +294,7 @@ class Report:
 
     @staticmethod
     def sym_n(dct):
-        """Проходится по словарю и заменяет '-' на '\n' в ключах словаря
+        """Проходится по словарю и заменяет '-' или ' ' на '\n' в ключах словаря
 
         :param dct: (dict) словарь статистики
         :return: dct: (dict) новый словарь статистики
