@@ -70,9 +70,9 @@ class Salary:
         >>> type(Salary(11.0, 21.4, 'RUR')).__name__
         'Salary'
         >>> Salary(11.0, 21.4, 'RUR').salary_from
-        11
+        11.0
         >>> Salary(11.0, 21.4, 'RUR').salary_to
-        21
+        21.4
         >>> Salary(11.0, 21.4, 'RUR').salary_currency
         'RUR'
         """
@@ -88,11 +88,11 @@ class Salary:
         :return: float salary_ru
 
         >>> Salary(11.0, 21.4, 'RUR').get_salary_ru()
-        16.0
+        16
         >>> Salary(10, 20, 'RUR').get_salary_ru()
-        16.0
+        15
         >>> Salary(10, 30.0, 'RUR').get_salary_ru()
-        20.0
+        20
         >>> Salary(10, 30.0, 'EUR').get_salary_ru()
         1198.0
         """
