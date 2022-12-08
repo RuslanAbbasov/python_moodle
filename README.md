@@ -4,6 +4,7 @@
 ![image](https://user-images.githubusercontent.com/103284052/205686502-437581ad-1af0-48e9-8087-67ee206d234d.png)
 Реализация unittest представлена в файле test_unittest.py
 ![image](https://user-images.githubusercontent.com/103284052/205687037-74531833-4e2a-4458-9d56-28cf3b7e21db.png)
+ПРОФИЛИЗАЦИЯ.
 Измерил функцию преобразования времени отдельно и получил значение 0.014 секунд.
 ![image](https://user-images.githubusercontent.com/103284052/206521713-73ef3cbe-33db-4f20-9b9d-6194ca3ba4a6.png)
 Измерил второй вариант функции и получил 0 секунд.
