@@ -166,6 +166,13 @@ class DataSet:
         return " ".join(re.sub(r"\<[^>]*\>", "", args).split())
 
 
+def format_date(date):
+    # return datetime.strptime(date, '%Y-%m-%dT%H:%M:%S%z').strftime('%Y')
+    return date[:4]
+    # date.split('-')
+    # return date[0]
+
+
 class InputConnect:
     """Класс для получения входных данных и вывода статистики
 
@@ -219,7 +226,7 @@ class InputConnect:
         """
         years = set()
         for vacancy in dic_vacancies:
-            years.add(int(vacancy.published_at[:4]))
+            years.add(int(format_date(vacancy.published_at)))
         years = sorted(list(years))
         years = list(range(min(years), max(years) + 1))
 
@@ -229,7 +236,7 @@ class InputConnect:
         vac_count_years = {year: 0 for year in years}
 
         for vacancy in dic_vacancies:
-            year = int(vacancy.published_at[:4])
+            year = int(format_date(vacancy.published_at))
             salary_years[year].append(vacancy.salary.get_salary_ru())
             vacs_years[year] += 1
             if vac_name in vacancy.name:
