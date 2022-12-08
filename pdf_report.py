@@ -219,7 +219,7 @@ class InputConnect:
         """
         years = set()
         for vacancy in dic_vacancies:
-            years.add(int(datetime.strptime(vacancy.published_at, '%Y-%m-%dT%H:%M:%S%z').strftime('%Y')))
+            years.add(int(vacancy.published_at[:4]))
         years = sorted(list(years))
         years = list(range(min(years), max(years) + 1))
 
@@ -229,7 +229,7 @@ class InputConnect:
         vac_count_years = {year: 0 for year in years}
 
         for vacancy in dic_vacancies:
-            year = int(datetime.strptime(vacancy.published_at, '%Y-%m-%dT%H:%M:%S%z').strftime('%Y'))
+            year = int(vacancy.published_at[:4])
             salary_years[year].append(vacancy.salary.get_salary_ru())
             vacs_years[year] += 1
             if vac_name in vacancy.name:
