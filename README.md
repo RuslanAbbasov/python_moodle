@@ -21,6 +21,8 @@
 
 Написал скрипт script_split.py, с помощью которого разделил csv файл на файлы, сортированные по годам
 ![image](https://user-images.githubusercontent.com/103284052/206548769-6d7e84ef-a542-473c-80d5-ccad49c855ee.png)
+![image](https://user-images.githubusercontent.com/103284052/206678978-cea714c8-46d4-40e8-b5c6-e0556f60731d.png)
+
 
 
 
